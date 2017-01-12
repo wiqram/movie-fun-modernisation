@@ -27,4 +27,5 @@ applications:
   routes:
     - route: movie-fun-app-{UNIQUE_IDENTIFIER}.apps.chicken.pal.pivotal.io
   services:
+  - movie-fun-config
   - moviefun-s3
