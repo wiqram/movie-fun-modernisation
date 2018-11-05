@@ -5,9 +5,9 @@ buildscript {
         mysqlVersion = "6.0.6"
         slf4jVersion = "1.7.25"
         hibernateVersion = "5.0.12.Final"
-       /* springCloudDependenciesVersion = "Edgware.RELEASE"
+        springCloudDependenciesVersion = "Edgware.RELEASE"
         springCloudServicesVersion = "1.6.6.RELEASE"
-        springCloudSsoVersion = "2.0.0.RELEASE"*/
+        springCloudSsoVersion = "2.0.0.RELEASE"
     }
 
     repositories {
