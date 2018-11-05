@@ -1,6 +1,13 @@
 buildscript {
     ext {
-        springBootVersion = "1.5.15.RELEASE"
+        springBootVersion = "1.5.7.RELEASE"
+        springVersion = "4.3.8.RELEASE"
+        mysqlVersion = "6.0.6"
+        slf4jVersion = "1.7.25"
+        hibernateVersion = "5.0.12.Final"
+       /* springCloudDependenciesVersion = "Edgware.RELEASE"
+        springCloudServicesVersion = "1.6.6.RELEASE"
+        springCloudSsoVersion = "2.0.0.RELEASE"*/
     }
 
     repositories {
@@ -16,16 +23,48 @@ repositories {
     mavenCentral()
 }
 
-apply plugin: "java"
-apply plugin: "war"
-apply plugin: "org.springframework.boot"
-
 group = "org.superbiz"
 version = "1.1.0-SNAPSHOT"
 
 description = "OpenEJB :: Web Examples :: Moviefun"
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+task dependenciesGraphDot {
+
+    mustRunAfter "clean"
+
+    def graphBuildDir = "build/dependenciesGraph"
+    def dotFile = file "$graphBuildDir/graph.dot"
+
+    doLast {
+        delete graphBuildDir
+        mkdir graphBuildDir
+
+        dotFile << "digraph dependencies {\n"
+
+        project.subprojects.forEach { Project subProject ->
+            try {
+
+                Configuration compileConfig = subProject.configurations["compile"]
+
+                compileConfig
+                        .dependencies
+                        .grep { it.respondsTo("getDependencyProject") }
+                        .forEach { dotFile << """  "$subProject.name" -> "$it.dependencyProject.name"\n""" }
+            } catch (UnknownConfigurationException ignored) {
+            }
+        }
+        dotFile << "}\n"
+    }
+}
+
+task dependenciesGraph(dependsOn: "dependenciesGraphDot", type: Exec) {
+    workingDir "$project.buildDir/dependenciesGraph"
+    commandLine "dot", "-O", "-Tpng", "graph.dot"
+}
+
+task clean(type: Delete) {
+    delete "build"
+}
+
 
 
