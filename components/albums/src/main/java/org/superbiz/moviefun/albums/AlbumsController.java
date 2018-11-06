@@ -22,6 +22,33 @@ import java.util.Optional;
 
 import static java.lang.String.format;
 
+@RestController
+@RequestMapping("/albums")
+public class AlbumsController {
+
+    private AlbumsRepository albumsRepository;
+
+    public AlbumsController(AlbumsRepository albumsRepository) {
+        this.albumsRepository = albumsRepository;
+    }
+
+    @PostMapping
+    public void addAlbum(@RequestBody Album album) {
+        albumsRepository.addAlbum(album);
+    }
+
+    @GetMapping
+    public List<Album> index() {
+        return albumsRepository.getAlbums();
+    }
+
+    @GetMapping("/{albumId}")
+    public Album details(@PathVariable long albumId) {
+        return albumsRepository.find(albumId);
+    }
+}
+
+/*
 @Controller
 @RequestMapping("/albums")
 public class AlbumsController {
@@ -34,7 +61,7 @@ public class AlbumsController {
         this.albumsRepository = albumsRepository;
         this.blobStore = blobStore;
     }
-
+*/
 /*    @PostMapping
     public void addAlbum(@RequestBody Album album) {
         albumsRepository.addAlbum(album);
@@ -129,4 +156,4 @@ public class AlbumsController {
     private String getCoverBlobName(@PathVariable long albumId) {
         return format("covers/%d", albumId);
     }*/
-}
+//}
