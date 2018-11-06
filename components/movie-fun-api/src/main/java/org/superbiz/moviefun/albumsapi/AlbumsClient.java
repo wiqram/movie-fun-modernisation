@@ -17,6 +17,8 @@ package org.superbiz.moviefun.albumsapi;
  * limitations under the License.
  */
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestOperations;
@@ -27,6 +29,8 @@ import static org.springframework.http.HttpMethod.GET;
 
 @Repository
 public class AlbumsClient {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     String albumsUrl;
     RestOperations restOperations;
@@ -40,6 +44,8 @@ public class AlbumsClient {
     }
 
     public void addAlbum(AlbumInfo albumInfo) {
+
+        logger.debug("Creating AlbumInfo from title {} : {}", albumInfo.getArtist(), albumInfo.getTitle());
         restOperations.postForEntity(albumsUrl, albumInfo, AlbumInfo.class);
 
     }
