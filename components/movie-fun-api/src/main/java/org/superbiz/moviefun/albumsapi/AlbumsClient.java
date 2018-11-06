@@ -44,6 +44,10 @@ public class AlbumsClient {
 
     }
 
+    public AlbumInfo find(long id) {
+        return restOperations.getForEntity(albumsUrl + "/" + id, AlbumInfo.class).getBody();
+    }
+
     public List<AlbumInfo> getAlbums() {
         return restOperations.exchange(albumsUrl, GET, null, albumListType).getBody();
     }
