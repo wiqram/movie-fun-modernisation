@@ -15,38 +15,69 @@ import org.superbiz.moviefun.blobstore.BlobStore;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static java.lang.String.format;
-import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 
 @Controller
 @RequestMapping("/albums")
 public class AlbumsController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final AlbumsBean albumsBean;
+    private final AlbumsRepository albumsRepository;
     private final BlobStore blobStore;
 
-    public AlbumsController(AlbumsBean albumsBean, BlobStore blobStore) {
-        this.albumsBean = albumsBean;
+    public AlbumsController(AlbumsRepository albumsRepository, BlobStore blobStore) {
+        this.albumsRepository = albumsRepository;
         this.blobStore = blobStore;
     }
+
+/*    @PostMapping
+    public void addAlbum(@RequestBody Album album) {
+        albumsRepository.addAlbum(album);
+    }
+
+
+    @DeleteMapping("/{albumId}")
+    public void deleteAlbumId(@PathVariable Long albumId) {
+        Album album = albumsRepository.find(albumId);
+        albumsRepository.deleteAlbum(album);
+    }*/
+/*
+
+    @GetMapping
+    public List<Album> find(
+            @RequestParam(name = "albumId", required = false) String albumId) {
+        if (albumId != null) {
+            List<Album> list = new ArrayList<>();
+            list.add(albumsRepository.find(Long.valueOf(albumId)));
+            return list;
+        } else {
+            return albumsRepository.getAlbums();
+        }
+    }
+*/
+
+
+/*
 
 
     @GetMapping
     public String index(Map<String, Object> model) {
-        model.put("albums", albumsBean.getAlbums());
+        model.put("albums", albumsRepository.getAlbums());
         return "albums";
     }
 
     @GetMapping("/{albumId}")
     public String details(@PathVariable long albumId, Map<String, Object> model) {
-        model.put("album", albumsBean.find(albumId));
+        model.put("album", albumsRepository.find(albumId));
         return "albumDetails";
-    }
+    }*/
 
+/*
     @PostMapping("/{albumId}/cover")
     public String uploadCover(@PathVariable Long albumId, @RequestParam("file") MultipartFile uploadedFile) {
         logger.debug("Uploading cover for album with id {}", albumId);
@@ -97,5 +128,5 @@ public class AlbumsController {
 
     private String getCoverBlobName(@PathVariable long albumId) {
         return format("covers/%d", albumId);
-    }
+    }*/
 }
