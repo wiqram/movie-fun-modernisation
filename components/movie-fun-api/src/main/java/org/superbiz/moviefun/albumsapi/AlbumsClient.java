@@ -2,6 +2,7 @@ package org.superbiz.moviefun.albumsapi;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.client.RestOperations;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class AlbumsClient {
     }
 
     public AlbumInfo find(long id) {
+        //UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(albumsUrl);
         return restOperations.getForEntity(albumsUrl + "/" + id, AlbumInfo.class).getBody();
     }
 
