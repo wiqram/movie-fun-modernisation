@@ -17,6 +17,8 @@ applications:
   - route: sylvik-album-service-cheerful-jaguar.apps.pikes.pal.pivotal.io
   memory: 1G
   instances: 1
+  env:
+    BLOBSTORE_URL: http://sylvik-blobstore-service-cheerful-jaguar.apps.pikes.pal.pivotal.io/blobstore
   services:
   - album-database
   - photo-storage
@@ -31,7 +33,14 @@ applications:
   env:
     ALBUMS_URL: http://sylvik-album-service-cheerful-jaguar.apps.pikes.pal.pivotal.io/albums
     MOVIES_URL: http://sylvik-movie-service-cheerful-jaguar.apps.pikes.pal.pivotal.io/movies
-
   services:
   - photo-storage
 
+- name: blobstore-service
+  path: ./applications/blobstore-service/build/libs/blobstore-service-1.1.0-SNAPSHOT.war
+  routes:
+  - route: sylvik-blobstore-service-cheerful-jaguar.apps.pikes.pal.pivotal.io
+  memory: 1G
+  instances: 1
+  services:
+  - photo-storage

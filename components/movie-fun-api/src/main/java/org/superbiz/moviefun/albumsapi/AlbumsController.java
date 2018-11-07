@@ -9,8 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.superbiz.moviefun.blobstore.Blob;
-import org.superbiz.moviefun.blobstore.BlobStore;
+import org.superbiz.moviefun.blobstoreapi.BlobStoreInfo;
+import org.superbiz.moviefun.blobstoreapi.BlobStoreClient;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,11 +26,11 @@ public class AlbumsController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final AlbumsClient albumsClient;
-    private final BlobStore blobStore;
+    private final BlobStoreClient blobStoreClient;
 
-    public AlbumsController(AlbumsClient albumsClient, BlobStore blobStore) {
+    public AlbumsController(AlbumsClient albumsClient, BlobStoreClient blobStoreClient) {
         this.albumsClient = albumsClient;
-        this.blobStore = blobStore;
+        this.blobStoreClient = blobStoreClient;
     }
 
 
@@ -65,11 +65,9 @@ public class AlbumsController {
 
     @GetMapping("/{albumId}/cover")
     public HttpEntity<byte[]> getCover(@PathVariable long albumId) throws IOException, URISyntaxException {
-        Optional<Blob> maybeCoverBlob = blobStore.get(getCoverBlobName(albumId));
-        Blob coverBlob = maybeCoverBlob.orElseGet(this::buildDefaultCoverBlob);
-
+        BlobStoreInfo maybeCoverBlob = blobStoreClient.get(getCoverBlobName(albumId));
+        BlobStoreInfo coverBlob = (maybeCoverBlob != null) ? maybeCoverBlob : buildDefaultCoverBlob();
         byte[] imageBytes = IOUtils.toByteArray(coverBlob.inputStream);
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(coverBlob.contentType));
         headers.setContentLength(imageBytes.length);
@@ -79,20 +77,20 @@ public class AlbumsController {
 
 
     private void tryToUploadCover(@PathVariable Long albumId, @RequestParam("file") MultipartFile uploadedFile) throws IOException {
-        Blob coverBlob = new Blob(
+        BlobStoreInfo coverBlob = new BlobStoreInfo(
             getCoverBlobName(albumId),
             uploadedFile.getInputStream(),
             uploadedFile.getContentType()
         );
 
-        blobStore.put(coverBlob);
+        blobStoreClient.put(coverBlob);
     }
 
-    private Blob buildDefaultCoverBlob() {
+    private BlobStoreInfo buildDefaultCoverBlob() {
         ClassLoader classLoader = getClass().getClassLoader();
         InputStream input = classLoader.getResourceAsStream("default-cover.jpg");
 
-        return new Blob("default-cover", input, MediaType.IMAGE_JPEG_VALUE);
+        return new BlobStoreInfo("default-cover", input, MediaType.IMAGE_JPEG_VALUE);
     }
 
     private String getCoverBlobName(@PathVariable long albumId) {

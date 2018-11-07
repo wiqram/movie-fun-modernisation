@@ -9,15 +9,17 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.superbiz.moviefun.ServiceCredentials;
+import org.superbiz.moviefun.blobstore.BlobStore;
+import org.superbiz.moviefun.blobstore.S3Store;
 
 @SpringBootApplication
-public class AlbumServiceApplication {
+public class BlobStoreServiceApplication {
 
     public static void main(String... args) {
-        SpringApplication.run(AlbumServiceApplication.class, args);
+        SpringApplication.run(BlobStoreServiceApplication.class, args);
     }
 
-   /* @Bean
+    @Bean
     ServiceCredentials serviceCredentials(@Value("${vcap.services}") String vcapServices) {
         return new ServiceCredentials(vcapServices);
     }
@@ -39,5 +41,5 @@ public class AlbumServiceApplication {
         }
 
         return new S3Store(s3Client, photoStorageBucket);
-    }*/
+    }
 }

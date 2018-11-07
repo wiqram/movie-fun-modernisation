@@ -1,4 +1,4 @@
-package org.superbiz.moviefun;
+package org.superbiz.moviefun.albums;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,23 +12,11 @@ import org.superbiz.moviefun.moviesapi.MoviesClient;
 @Configuration
 public class ClientConfiguration {
 
-    @Value("${movies.url}") String moviesUrl;
-    @Value("${albums.url}") String albumsUrl;
     @Value("${blobstore.url}") String blobstoreUrl;
 
     @Bean
     public RestOperations restOperations() {
         return new RestTemplate();
-    }
-
-    @Bean
-    public MoviesClient moviesClient(RestOperations restOperations) {
-        return new MoviesClient(moviesUrl, restOperations);
-    }
-
-    @Bean
-    public AlbumsClient albumsClient(RestOperations restOperations) {
-        return new AlbumsClient(albumsUrl, restOperations);
     }
 
     @Bean
