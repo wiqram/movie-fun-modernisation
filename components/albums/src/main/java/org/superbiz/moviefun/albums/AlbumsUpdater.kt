@@ -3,6 +3,8 @@ package org.superbiz.moviefun.albums
 import com.fasterxml.jackson.databind.ObjectReader
 import com.fasterxml.jackson.dataformat.csv.CsvMapper
 import com.fasterxml.jackson.dataformat.csv.CsvSchema
+import com.fasterxml.jackson.dataformat.csv.CsvSchema.ColumnType
+import com.fasterxml.jackson.dataformat.csv.CsvSchema.builder
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.superbiz.moviefun.CsvUtils
@@ -37,7 +39,7 @@ class AlbumsUpdater(private val blobStore: BlobStore, private val albumsReposito
         }
 
         val albumsToHave = CsvUtils.readFromCsv<Album>(objectReader, maybeBlob.get().inputStream)
-        val albumsWeHave = albumsRepository.albums
+        val albumsWeHave = albumsRepository.getAlbums()
 
         createNewAlbums(albumsToHave, albumsWeHave)
         deleteOldAlbums(albumsToHave, albumsWeHave)
@@ -77,4 +79,3 @@ class AlbumsUpdater(private val blobStore: BlobStore, private val albumsReposito
         return album
     }
 }
-
