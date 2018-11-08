@@ -14,8 +14,9 @@ public class AlbumsClient {
     private RestOperations restOperations;
 
     public AlbumsClient(String albumsUrl, RestOperations restOperations) {
-        this.albumsUrl = albumsUrl;
         this.restOperations = restOperations;
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(albumsUrl);
+        this.albumsUrl = builder.build().toUriString();
     }
 
     public void addAlbum(AlbumInfo album) {
@@ -23,7 +24,6 @@ public class AlbumsClient {
     }
 
     public AlbumInfo find(long id) {
-        //UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(albumsUrl);
         return restOperations.getForEntity(albumsUrl + "/" + id, AlbumInfo.class).getBody();
     }
 
