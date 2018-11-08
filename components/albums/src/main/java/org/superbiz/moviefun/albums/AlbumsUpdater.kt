@@ -37,7 +37,7 @@ class AlbumsUpdater(private val blobStore: BlobStore, private val albumsReposito
         }
 
         val albumsToHave = CsvUtils.readFromCsv<Album>(objectReader, maybeBlob.get().inputStream)
-        val albumsWeHave = albumsRepository.getAlbums()
+        val albumsWeHave = albumsRepository.albums
 
         createNewAlbums(albumsToHave, albumsWeHave)
         deleteOldAlbums(albumsToHave, albumsWeHave)
