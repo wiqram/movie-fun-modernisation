@@ -27,10 +27,12 @@ public class AlbumsController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final AlbumsClient albumsClient;
     private final BlobStore blobStore;
+    private final CoverCatalog coverCatalog;
 
-    public AlbumsController(AlbumsClient albumsClient, BlobStore blobStore) {
+    public AlbumsController(AlbumsClient albumsClient, BlobStore blobStore, CoverCatalog coverCatalog) {
         this.albumsClient = albumsClient;
         this.blobStore = blobStore;
+        this.coverCatalog = coverCatalog;
     }
 
     @GetMapping
@@ -63,9 +65,11 @@ public class AlbumsController {
 
     @GetMapping("/{albumId}/cover")
     public HttpEntity<byte[]> getCover(@PathVariable long albumId) throws IOException, URISyntaxException {
-        Optional<Blob> maybeCoverBlob = blobStore.get(getCoverBlobName(albumId));
-        Blob coverBlob = maybeCoverBlob.orElseGet(this::buildDefaultCoverBlob);
+        /*Optional<Blob> maybeCoverBlob = blobStore.get(getCoverBlobName(albumId));
+        Blob coverBlob = maybeCoverBlob.orElseGet(this::buildDefaultCoverBlob);*/
 
+        //coverCatalog.uploadCover(albumId, coverBlob.inputStream, coverBlob.contentType);
+        Blob coverBlob = coverCatalog.getCover(albumId);
         byte[] imageBytes = IOUtils.toByteArray(coverBlob.inputStream);
 
         HttpHeaders headers = new HttpHeaders();
@@ -83,7 +87,8 @@ public class AlbumsController {
             uploadedFile.getContentType()
         );
 
-        blobStore.put(coverBlob);
+        //blobStore.put(coverBlob);
+        coverCatalog.uploadCover(albumId, coverBlob.inputStream, coverBlob.contentType);
     }
 
     private Blob buildDefaultCoverBlob() {
