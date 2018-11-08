@@ -18,8 +18,7 @@ public class MoviesClient {
 
     public MoviesClient(String moviesUrl, RestOperations restOperations) {
         this.restOperations = restOperations;
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(moviesUrl);
-        this.moviesUrl = builder.build().toUriString();
+        this.moviesUrl = moviesUrl;
     }
 
     public void addMovie(MovieInfo movie) {

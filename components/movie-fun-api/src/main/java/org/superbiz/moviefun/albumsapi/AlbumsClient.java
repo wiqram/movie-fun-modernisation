@@ -15,8 +15,7 @@ public class AlbumsClient {
 
     public AlbumsClient(String albumsUrl, RestOperations restOperations) {
         this.restOperations = restOperations;
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(albumsUrl);
-        this.albumsUrl = builder.build().toUriString();
+        this.albumsUrl = albumsUrl;
     }
 
     public void addAlbum(AlbumInfo album) {
