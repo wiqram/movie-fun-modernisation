@@ -9,10 +9,9 @@ class AlbumsController(private val albumsRepository: AlbumsRepository) {
     @PostMapping
     fun addAlbum(@RequestBody album: Album) = albumsRepository.addAlbum(album)
 
-
     @GetMapping
-    fun index() = albumsRepository.albums
+    fun index() = albumsRepository.getAlbums()
 
     @GetMapping("/{albumId}")
-    fun details(@PathVariable albumId: Long)= albumsRepository.find(albumId)
+    fun details(@PathVariable albumId: Long) = albumsRepository.find(albumId)
 }
